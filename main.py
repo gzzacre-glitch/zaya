@@ -44,7 +44,7 @@ class PontoView(discord.ui.View):
         ativo = cursor.fetchone()
         
         if ativo:
-            await interaction.response.send_message("⚠️ Você já possui um bate-ponto em aberto!", ephemeral=True)
+            await interaction.response.send_message("⚠️ Já tens um bate-ponto em aberto!", ephemeral=True)
             conn.close()
             return
 
@@ -73,7 +73,7 @@ class PontoView(discord.ui.View):
         ativo = cursor.fetchone()
         
         if not ativo:
-            await interaction.response.send_message("⚠️ Você não possui nenhum bate-ponto em aberto!", ephemeral=True)
+            await interaction.response.send_message("⚠️ Não tens nenhum bate-ponto em aberto!", ephemeral=True)
             conn.close()
             return
 
@@ -98,27 +98,27 @@ class PainelView(discord.ui.View):
 
     @discord.ui.button(label="Bate-Ponto", style=discord.ButtonStyle.secondary, emoji="🕐", custom_id="btn_ponto")
     async def btn_ponto(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("🕐 Utilize o comando `/ponto` para abrir o controle de jornada.", ephemeral=True)
+        await interaction.response.send_message("🕐 Utilize o comando `/ponto` para abrir o controlo de jornada.", ephemeral=True)
 
     @discord.ui.button(label="Minha Ficha", style=discord.ButtonStyle.secondary, emoji="👤", custom_id="btn_ficha")
     async def btn_ficha(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("👤 Carregando sua ficha individual...", ephemeral=True)
+        await interaction.response.send_message("👤 A carregar a sua ficha individual...", ephemeral=True)
 
     @discord.ui.button(label="Membros", style=discord.ButtonStyle.secondary, emoji="👥", custom_id="btn_membros")
     async def btn_membros(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("👥 Abrindo gestão de membros...", ephemeral=True)
+        await interaction.response.send_message("👥 A abrir a gestão de membros...", ephemeral=True)
 
     @discord.ui.button(label="Promoções", style=discord.ButtonStyle.secondary, emoji="📈", custom_id="btn_promocoes")
     async def btn_promocoes(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("📈 Abrindo sistema de promoções...", ephemeral=True)
+        await interaction.response.send_message("📈 A abrir o sistema de promoções...", ephemeral=True)
 
     @discord.ui.button(label="Advertências", style=discord.ButtonStyle.secondary, emoji="⚠️", custom_id="btn_advertencias")
     async def btn_advertencias(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("⚠️ Abrindo painel de advertências...", ephemeral=True)
+        await interaction.response.send_message("⚠️ A abrir o painel de advertências...", ephemeral=True)
 
     @discord.ui.button(label="Relatórios", style=discord.ButtonStyle.secondary, emoji="📊", custom_id="btn_relatorios")
     async def btn_relatorios(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("📊 Gerando relatórios da organização...", ephemeral=True)
+        await interaction.response.send_message("📊 A gerar relatórios da organização...", ephemeral=True)
 
     @discord.ui.button(label="Administração", style=discord.ButtonStyle.danger, emoji="⚙️", custom_id="btn_admin")
     async def btn_admin(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -144,10 +144,10 @@ async def on_ready():
     print(f"🛡️ ZAYA conectado com sucesso como {bot.user} (ID: {bot.user.id})")
 
 # Comando /ponto
-@bot.tree.command(name="ponto", description="Abre o painel interativo de controle de jornada.")
+@bot.tree.command(name="ponto", description="Abre o painel interativo de controlo de jornada.")
 async def ponto(interaction: discord.Interaction):
     embed = discord.Embed(
-        title="🛡️ CONTROLE DE JORNADA",
+        title="🛡️ CONTROLO DE JORNADA",
         description="Utilize os botões abaixo para iniciar ou encerrar o seu expediente atual.",
         color=0x2B2D31
     )
@@ -174,8 +174,9 @@ async def painel(interaction: discord.Interaction):
     )
     embed.set_footer(text="AEGIS — Sistema de Gestão GTA RP")
 
-    await interaction.channel.send(embed=embed, view=PainelView())
+    # Responde primeiro à interação do slash command com ephemeral para evitar loading infinito, e envia o painel no canal
     await interaction.response.send_message("✅ Painel principal gerado com sucesso!", ephemeral=True)
+    await interaction.channel.send(embed=embed, view=PainelView())
 
 # Execução do Bot integrando com as variáveis de ambiente da Discloud
 if __name__ == "__main__":
