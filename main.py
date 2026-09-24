@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from datetime import datetime
 import discord
@@ -176,7 +177,10 @@ async def painel(interaction: discord.Interaction):
     await interaction.channel.send(embed=embed, view=PainelView())
     await interaction.response.send_message("✅ Painel principal gerado com sucesso!", ephemeral=True)
 
-# Execução do Bot (Insira seu token ou configure na Discloud)
+# Execução do Bot integrando com as variáveis de ambiente da Discloud
 if __name__ == "__main__":
-    TOKEN = "SEU_TOKEN_AQUI"
-    bot.run(TOKEN)
+    TOKEN = os.getenv("DISCORD_TOKEN")
+    if not TOKEN:
+        print("❌ Erro: A variável DISCORD_TOKEN não foi configurada na Discloud!")
+    else:
+        bot.run(TOKEN)
